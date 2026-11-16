@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: toolmaster
+    env: node
+    plan: free
+    buildCommand: ""
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    # Note: the JSON database lives on the local filesystem (data/db.json).
+    # On Render's free plan the filesystem is ephemeral and resets on redeploys.
+    # Attach a persistent disk (paid) mounted at /opt/render/project/src/data
+    # and set DATA_DIR to that path to keep accounts/credits between deploys.

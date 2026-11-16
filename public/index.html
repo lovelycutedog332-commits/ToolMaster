@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToolMaster — Free Online Tools</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="nav">
+  <a class="logo" href="#" data-nav="home">Tool<span>Master</span></a>
+  <nav class="nav-links">
+    <a href="#" data-nav="home">Tools</a>
+    <a href="#" data-nav="free">Free Tools</a>
+    <span id="nav-auth">
+      <a href="#" class="btn btn-outline" data-nav="login">Login</a>
+      <a href="#" class="btn btn-primary" data-nav="signup">Sign Up</a>
+    </span>
+    <span id="nav-user" class="hidden">
+      <span class="credit-badge" title="Your credit balance">⭐ <span id="nav-balance">0</span> Credits</span>
+      <span class="profile-wrap">
+        <button id="profile-btn" class="btn btn-primary" type="button">Account ▾</button>
+        <span id="profile-menu" class="profile-menu hidden">
+          <a href="#" data-nav="dashboard">Dashboard</a>
+          <a href="#" data-nav="admin" id="admin-link" class="hidden">Admin Panel</a>
+          <a href="#" id="logout-link">Logout</a>
+        </span>
+      </span>
+    </span>
+  </nav>
+</header>
+
+<main>
+  <!-- HOME / PAID TOOLS -->
+  <section id="view-home" class="view">
+    <div class="hero">
+      <h1>ToolMaster</h1>
+      <p>Welcome to your free account</p>
+      <div class="hero-credits"><span id="hero-bonus">100</span> Credits</div>
+      <span class="badge-green">FREE SIGNUP BONUS</span>
+      <p class="hero-small">Your starting credit balance — free when you create a verified account.</p>
+      <a href="#" class="btn btn-light" data-nav="signup">Create Free Account</a>
+    </div>
+    <h2>AI Generators <small>(credits)</small></h2>
+    <div id="paid-tools" class="tool-grid"></div>
+    <div class="card">
+      <label id="tool-input-label" for="tool-input">Enter your keyword / topic</label>
+      <input id="tool-input" type="text" placeholder="e.g. weight loss tips">
+      <button id="run-tool-btn" class="btn btn-primary" type="button">Generate</button>
+      <p id="tool-msg" class="msg"></p>
+      <div id="tool-output" class="output hidden"></div>
+    </div>
+  </section>
+
+  <!-- FREE TOOLS -->
+  <section id="view-free" class="view hidden">
+    <h2>Free Tools <small>(no login, no credits)</small></h2>
+    <div class="tool-grid">
+      <div class="card">
+        <h3>Word Counter</h3>
+        <textarea id="wc-input" rows="5" placeholder="Type or paste text..."></textarea>
+        <p id="wc-result" class="result">Words: 0 · Characters: 0</p>
+      </div>
+      <div class="card">
+        <h3>Case Converter</h3>
+        <textarea id="cc-input" rows="4" placeholder="Type text..."></textarea>
+        <div class="row">
+          <button class="btn btn-outline" data-case="upper" type="button">UPPERCASE</button>
+          <button class="btn btn-outline" data-case="lower" type="button">lowercase</button>
+          <button class="btn btn-outline" data-case="title" type="button">Title Case</button>
+        </div>
+        <p id="cc-result" class="result"></p>
+      </div>
+      <div class="card">
+        <h3>Percentage Calculator</h3>
+        <input id="pc-a" type="number" placeholder="Value (e.g. 50)">
+        <input id="pc-b" type="number" placeholder="Total (e.g. 200)">
+        <button id="pc-btn" class="btn btn-primary" type="button">Calculate</button>
+        <p id="pc-result" class="result"></p>
+      </div>
+      <div class="card">
+        <h3>Password Generator</h3>
+        <input id="pg-length" type="number" value="14" min="6" max="64">
+        <button id="pg-btn" class="btn btn-primary" type="button">Generate Password</button>
+        <p id="pg-result" class="result mono"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNUP -->
+  <section id="view-signup" class="view hidden">
+    <div class="hero">
+      <div class="hero-title">ToolMaster</div>
+      <p>Welcome to your free account</p>
+      <div class="hero-credits"><span id="hero-bonus-2">100</span> Credits</div>
+      <span class="badge-green">FREE SIGNUP BONUS</span>
+      <p class="hero-small">Your starting credit balance</p>
+    </div>
+    <div class="features">
+      <h3>Account features</h3>
+      <ul>
+        <li>Free signup and login</li>
+        <li>100 credits for every new verified account</li>
+        <li>Credit balance in dashboard</li>
+        <li>Paid generators cost only 2–3 credits each</li>
+        <li>Free calculators and text tools — no credits needed</li>
+      </ul>
+    </div>
+    <form id="signup-form" class="card form">
+      <h2>Create your account</h2>
+      <input name="fullName" type="text" placeholder="Full Name" required>
+      <input name="email" type="email" placeholder="Email Address" required>
+      <input name="password" type="password" placeholder="Password" required>
+      <input name="confirmPassword" type="password" placeholder="Confirm Password" required>
+      <button class="btn btn-primary" type="submit">Sign Up — Get 100 Free Credits</button>
+      <p class="msg" id="signup-msg"></p>
+      <div id="verify-box" class="verify-box hidden">
+        <p><strong>Simulated email delivery:</strong> no mail provider is connected yet, so your verification code is shown here:</p>
+        <p class="code" id="verify-code"></p>
+        <input id="verify-input" type="text" placeholder="Enter 6-digit verification code">
+        <button id="verify-btn" class="btn btn-primary" type="button">Verify &amp; Claim Credits</button>
+        <p class="msg" id="verify-msg"></p>
+      </div>
+      <p class="alt">Already have an account? <a href="#" data-nav="login">Login</a></p>
+      <button class="btn btn-google" type="button" disabled title="Google login needs an OAuth client ID">Continue with Google (coming soon)</button>
+    </form>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="view-login" class="view hidden">
+    <form id="login-form" class="card form">
+      <h2>Login to ToolMaster</h2>
+      <input name="email" type="email" placeholder="Email Address" required>
+      <input name="password" type="password" placeholder="Password" required>
+      <button class="btn btn-primary" type="submit">Login</button>
+      <p class="msg" id="login-msg"></p>
+      <p class="alt"><a href="#" data-nav="forgot">Forgot password?</a> · New here? <a href="#" data-nav="signup">Sign Up</a></p>
+    </form>
+  </section>
+
+  <!-- FORGOT / RESET -->
+  <section id="view-forgot" class="view hidden">
+    <form id="forgot-form" class="card form">
+      <h2>Reset your password</h2>
+      <input name="email" type="email" placeholder="Email Address" required>
+      <button class="btn btn-primary" type="submit">Send Reset Code</button>
+      <p class="msg" id="forgot-msg"></p>
+      <div id="reset-box" class="hidden">
+        <p><strong>Simulated email delivery:</strong> your reset code is shown here:</p>
+        <p class="code" id="reset-code"></p>
+        <input id="reset-input" type="text" placeholder="Enter 6-digit reset code">
+        <input id="reset-password" type="password" placeholder="New Password">
+        <button id="reset-btn" class="btn btn-primary" type="button">Set New Password</button>
+        <p class="msg" id="reset-msg"></p>
+      </div>
+    </form>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="view-dashboard" class="view hidden">
+    <h2 id="dash-welcome">Welcome</h2>
+    <div class="stat-grid">
+      <div class="stat navy"><span>Current Balance</span><strong id="stat-balance">0</strong><small>credits</small></div>
+      <div class="stat"><span>Total Earned</span><strong id="stat-earned">0</strong></div>
+      <div class="stat"><span>Total Used</span><strong id="stat-used">0</strong></div>
+    </div>
+    <div class="card">
+      <h3>Recent Activity &amp; Transaction History</h3>
+      <div id="tx-list" class="tx-list"></div>
+    </div>
+    <div class="card form">
+      <h3>Account Settings</h3>
+      <input id="settings-name" type="text" placeholder="Full Name">
+      <button id="settings-save" class="btn btn-primary" type="button">Save Settings</button>
+      <p class="msg" id="settings-msg"></p>
+      <h3>Change Password</h3>
+      <input id="cp-current" type="password" placeholder="Current Password">
+      <input id="cp-new" type="password" placeholder="New Password">
+      <button id="cp-btn" class="btn btn-primary" type="button">Change Password</button>
+      <p class="msg" id="cp-msg"></p>
+      <button id="dash-logout" class="btn btn-outline" type="button">Logout</button>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="view-admin" class="view hidden">
+    <h2>Admin Panel</h2>
+    <div class="card">
+      <h3>Registered Users</h3>
+      <div id="admin-users" class="tx-list"></div>
+    </div>
+    <div class="card" id="admin-user-detail" >
+      <h3>User Credit Management</h3>
+      <p class="result" id="admin-selected">Select a user above.</p>
+      <input id="admin-amount" type="number" placeholder="Amount">
+      <input id="admin-reason" type="text" placeholder="Reason (recorded)">
+      <div class="row">
+        <button id="admin-add" class="btn btn-primary" type="button">Add Credits</button>
+        <button id="admin-deduct" class="btn btn-outline" type="button">Deduct Credits</button>
+        <button id="admin-suspend" class="btn btn-outline" type="button">Suspend / Unsuspend</button>
+      </div>
+      <p class="msg" id="admin-msg"></p>
+      <h4>Transaction History</h4>
+      <div id="admin-txs" class="tx-list"></div>
+    </div>
+    <div class="card">
+      <h3>Tool Costs</h3>
+      <div id="admin-costs" class="tx-list"></div>
+      <h3>Signup Bonus</h3>
+      <input id="admin-bonus" type="number" placeholder="Signup bonus credits">
+      <button id="admin-bonus-save" class="btn btn-primary" type="button">Save Bonus</button>
+      <p class="msg" id="admin-settings-msg"></p>
+    </div>
+  </section>
+</main>
+
+<footer>ToolMaster — free tools with a fair credit system. Credits are managed securely on the server.</footer>
+<script src="/app.js"></script>
+</body>
+</html>
