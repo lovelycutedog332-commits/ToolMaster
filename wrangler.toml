@@ -1,0 +1,17 @@
+name = "toolmaster"
+main = "src/worker.js"
+compatibility_date = "2024-11-01"
+
+# Static frontend (public/) served by Workers Static Assets.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# Persistent D1 (SQLite) database — accounts and credits survive deploys.
+# Create the database first (Cloudflare dashboard: Storage & databases → D1 →
+# Create database "toolmaster-db"), then replace the placeholder database_id
+# below with the real ID shown in the dashboard.
+[[d1_databases]]
+binding = "DB"
+database_name = "toolmaster-db"
+database_id = "00000000-0000-0000-0000-000000000000"

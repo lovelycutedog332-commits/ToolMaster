@@ -3,6 +3,44 @@
 A standalone, deployable tools website with user accounts and a secure,
 server-side free-credit system. Built with **Node.js only — zero external
 npm dependencies** (uses only `http`, `fs`, `path`, `crypto`, `url`).
+The same app also ships as a **Cloudflare Workers + D1** version
+(`src/worker.js`) with identical behavior — see the recommended deploy path
+below.
+
+## Deploy on Cloudflare (free, no card) — RECOMMENDED
+
+Cloudflare's free Workers plan needs **no credit card**, and the database is
+**D1 (SQLite)** — persistent storage, so user accounts and credit balances
+**do not reset** on deploys (unlike the Render free-tier filesystem below).
+
+1. Sign up at [cloudflare.com](https://cloudflare.com) (Google or GitHub
+   sign-in is fine).
+2. Create the database: **Storage & databases → D1 → Create database**, name
+   it `toolmaster-db`.
+3. Copy its **database ID** and paste it into `wrangler.toml` in this repo,
+   replacing the placeholder `database_id`
+   (`00000000-0000-0000-0000-000000000000`). Commit/push that change.
+4. (Optional) Apply `schema.sql`: open the new database's **Console** tab
+   and paste the file's contents. This step is optional — the Worker runs
+   `CREATE TABLE IF NOT EXISTS` automatically on its first request and seeds
+   the default tool costs and the 100-credit signup bonus itself.
+5. Deploy the Worker: **Workers & Pages → Create → Workers → Import a
+   repository** (connect GitHub and pick
+   `lovelycutedog332-commits/ToolMaster`):
+   - **Production branch:** `main`
+   - **Build command:** `npm install` (or leave empty — there are no
+     dependencies)
+   - **Deploy command:** `npx wrangler deploy`
+6. Confirm the D1 binding: in the Worker's settings the `DB` binding must
+   point at `toolmaster-db` (the `[[d1_databases]]` block in `wrangler.toml`
+   sets this up on deploy).
+7. Open the public URL — it looks like
+   `https://toolmaster.<your-subdomain>.workers.dev`.
+8. **Register + verify the first account yourself right away** — the first
+   registered + verified user automatically becomes the admin.
+
+Files for this path: `src/worker.js` (the whole API + static-asset serving),
+`wrangler.toml`, `schema.sql`, and the unchanged frontend in `public/`.
 
 ## Features
 
@@ -52,13 +90,22 @@ Optional environment variables:
 
 ## Database
 
-Server-side JSON file at `data/db.json` (created on first run; listed in
+**Cloudflare version:** D1 (SQLite), bound as `DB` — see `schema.sql`. The
+tables mirror the spec (users, credits, credit_transactions, sessions,
+auth_codes, tool_costs, settings) and are persistent across deploys.
+
+**Node version:** server-side JSON file at `data/db.json` (created on first run; listed in
 `.gitignore`, never commit a real one). Writes are atomic (temp file +
 rename) and all mutations are serialized in-process, which prevents race
 conditions and double-charging. Tables: `users`, `credits`,
 `creditTransactions`, `sessions`, `toolCosts`, `settings`, `authTokens`.
 
-## Deploy on Render (free)
+## Deploy on Render (free tier — requires a card on file)
+
+> ⚠️ Render asks for a **credit/debit card on file before creating any
+> service, even on the Free $0 plan** (a $1 temporary verification hold that
+> is not charged). If you don't want to add a card, use the Cloudflare path
+> above instead.
 
 1. Push this folder to a GitHub repository.
 2. In Render: **New → Web Service**, connect that repository.
@@ -89,10 +136,13 @@ lasting public site, either:
 
 ```
 server.js          Backend API + static file server (Node built-ins only)
+src/worker.js      Cloudflare Workers version of the same API (D1 database)
+wrangler.toml      Cloudflare Workers + D1 + static assets config
+schema.sql         D1 (SQLite) schema + default costs/bonus seeds
 public/index.html  Single-page frontend
 public/styles.css  Navy (#1F1F5E) & white theme, mobile responsive
 public/app.js      Frontend logic (never trusted for balances)
 package.json       "start": "node server.js", engines node >= 18
 render.yaml        Render service definition
-data/db.json       Created on first run (git-ignored)
+data/db.json       Created on first run (git-ignored, Node version only)
 ```
