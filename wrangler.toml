@@ -14,4 +14,4 @@ binding = "ASSETS"
 [[d1_databases]]
 binding = "DB"
 database_name = "toolmaster-db"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "f5314b01-c9ef-48b3-b95e-8fe35602a87e"
